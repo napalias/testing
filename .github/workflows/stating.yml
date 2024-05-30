@@ -11,9 +11,7 @@ jobs:
       - name: Make API call
         run: |
           curl -X GET https://eolk6gljqh6f4mh.m.pipedream.net?env=1234
-
       - uses: actions/checkout@v3
-
       - name: Generate Environment Name
         id: generate-env-name
         run: echo "env_name=pr-${{ github.event.number }}" >> $GITHUB_ENV
