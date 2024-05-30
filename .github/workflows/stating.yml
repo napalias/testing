@@ -1,10 +1,12 @@
 name: Deploy Staged
 on:
   pull_request:
+    types: [opened, closed]
     branches:
       - main
 jobs:
   deploy:
+    if: github.event.action == 'opened'
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
@@ -25,10 +27,12 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY }}
 
   cleanup_environment:
+    if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
-      - name: Make API call
-        run: |
-          curl -X GET https://eolk6gljqh6f4mh.m.pipedream.net?env=${{ github.event.action }}
-
+      - name: Destroy Fly.IO App
+        run: flyctl apps destroy pr-${{ github.event.number }} --yes
+      - name: Destroy GitHub Environment
+        run: gh api -X DELETE /repos/{owner}/{repo}/environments/pr-${{ github.event.number }}
+  
       
