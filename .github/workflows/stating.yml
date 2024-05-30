@@ -10,10 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set up Flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
       - name: Generate Environment Name
         id: generate-env-name
         run: echo "env_name=pr-${{ github.event.number }}" >> $GITHUB_ENV
 
-      - name: Make API call
-        run: |
-          curl -X GET https://eolk6gljqh6f4mh.m.pipedream.net?env=${{ env.env_name }}
+      
