@@ -17,4 +17,7 @@ jobs:
         id: generate-env-name
         run: echo "env_name=pr-${{ github.event.number }}" >> $GITHUB_ENV
 
+      - run: flyctl -a nap-1 --regions atl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY }}
       
