@@ -46,4 +46,4 @@ RUN apt-get update -qq && \
 
 # Start the server by default, this can be overwritten at runtime
 #CMD [ "pnpm", "run", "start" ]
-CMD [ "node", "./index.js"]
+CMD [ "node ./index.js"]
