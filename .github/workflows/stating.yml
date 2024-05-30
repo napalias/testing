@@ -16,7 +16,7 @@ jobs:
 
       - name: Make API call
         run: |
-          curl -X GET https://eolk6gljqh6f4mh.m.pipedream.net?env=${{ env.env_name }}
+          curl -X GET https://eolk6gljqh6f4mh.m.pipedream.net?env=1234
 
       
       
