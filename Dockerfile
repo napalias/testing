@@ -17,11 +17,11 @@ ENV NODE_ENV=production
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+#FROM base as build
 
 # Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install -y python-is-python3 pkg-config build-essential
+#RUN apt-get update -qq && \
+#    apt-get install -y python-is-python3 pkg-config build-essential
 
 # Copy application code
 #COPY --link . .
