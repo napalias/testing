@@ -1,0 +1,19 @@
+name: Fly Deploy Staged
+on:
+  pull_request:
+    branches:
+      - develop
+jobs:
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate Environment Name
+        id: generate-env-name
+        run: echo "env_name=pr-123" >> $GITHUB_ENV
+
+      
+      
+      
