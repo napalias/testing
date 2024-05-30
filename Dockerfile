@@ -13,7 +13,7 @@ WORKDIR /
 ENV NODE_ENV=production
 
 # Setup pnpm
-RUN npm install -g pnpm
+#RUN npm install -g pnpm
 
 
 # Throw-away build stage to reduce size of final image
@@ -46,4 +46,3 @@ RUN apt-get update -qq && \
 
 # Start the server by default, this can be overwritten at runtime
 #CMD [ "pnpm", "run", "start" ]
-CMD [ "node ./index.js"]
