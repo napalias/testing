@@ -2,7 +2,7 @@ name: Fly Deploy Staged
 on:
   pull_request:
     branches:
-      - develop
+      - main
 jobs:
   deploy:
     name: Deploy app
