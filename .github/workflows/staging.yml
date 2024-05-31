@@ -39,12 +39,6 @@ jobs:
           flyctl ssh console --app ${{ env.env_name }} --command "pwd"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY }}
-      
-#  post:
-#    - name: Remove Fly.io app
-#      run: flyctl apps destroy ${{ env.env_name }} --yes
-#      env:
-#        FLY_API_TOKEN: ${{ secrets.FLY }}
 
   cleanup_environment:
     if: github.event.action == 'closed'
