@@ -10,9 +10,6 @@ jobs:
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
-      - name: Echo github obj
-        run: echo ${{ toJson(github) }}
-
       - uses: actions/checkout@v3
 
       - name: Set up Flyctl
