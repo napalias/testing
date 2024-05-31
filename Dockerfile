@@ -45,4 +45,4 @@ RUN npm install -g pnpm
 #WORKDIR /app/apps/bnsn-api
 
 # Start the server by default, this can be overwritten at runtime
-CMD [ "pnpm", "run", "start" ]
+CMD [ "pnpm", "run" ]
