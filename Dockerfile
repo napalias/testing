@@ -46,4 +46,4 @@ ENV NODE_ENV=production
 
 # Start the server by default, this can be overwritten at runtime
 #CMD [ "pnpm", "run", "start" ]
-CMD [ "ls" ]
+CMD [ "npm", "run" ]
