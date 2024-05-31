@@ -16,7 +16,7 @@ jobs:
 
       - name: Generate Environment Name
         id: generate-env-name
-        run: echo "::set-output name=env_name::bnsn-pr-${{ github.event.number }}"
+        run: echo "env_name=bnsn-pr-${{ github.event.number }}" >> $GITHUB_ENV
 
       - name: Deploy to Fly.io
         run: |

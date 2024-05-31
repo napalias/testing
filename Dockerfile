@@ -45,5 +45,4 @@ ENV NODE_ENV=production
 #WORKDIR /app/apps/bnsn-api
 
 # Start the server by default, this can be overwritten at runtime
-#CMD [ "pnpm", "run", "start" ]
-CMD [ "npm", "run" ]
+CMD [ "pnpm", "run", "start" ]
