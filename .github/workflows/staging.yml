@@ -1,7 +1,6 @@
 name: Deploy Staging
 on:
   pull_request:
-    types: [opened, closed]
     branches:
       - main
 jobs:
@@ -17,23 +16,23 @@ jobs:
 
       - name: Generate Environment Name
         id: generate-env-name
-        run: echo "env_name=bnsn-pr-${{ github.event.number }}" >> $GITHUB_ENV
+        run: echo "::set-output name=env_name::bnsn-pr-${{ github.event.number }}"
 
       - name: Deploy to Fly.io
         run: |
-          if ! flyctl apps list --json | jq -e '.[] | select(.Name == env.env_name)' > /dev/null; then
-            flyctl apps create ${{ env.env_name }} --org personal
-            echo "Created new app ${{ env.env_name }}"
+          if ! flyctl apps list --json | jq -e '.[] | select(.Name == "${{ steps.generate-env-name.outputs.env_name }}")' > /dev/null; then
+            flyctl apps create ${{ steps.generate-env-name.outputs.env_name }} --org personal
+            echo "Created new app ${{ steps.generate-env-name.outputs.env_name }}"
           else
-            echo "App ${{ env.env_name }} already exists"
+            echo "App ${{ steps.generate-env-name.outputs.env_name }} already exists"
           fi 
-          flyctl deploy --app ${{ env.env_name }} --remote-only
+          flyctl deploy --app ${{ steps.generate-env-name.outputs.env_name }} --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY }}
 
       - name: Execute supabase commands on Fly.io instance
         run: |
-          flyctl ssh console --app ${{ env.env_name }} --command "pwd"
+          flyctl ssh console --app ${{ steps.generate-env-name.outputs.env_name }} --command "pwd"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY }}
 
@@ -43,11 +42,14 @@ jobs:
     steps:
       - name: Set up Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Get Environment Name
+        run: echo "::set-output name=env_name::bnsn-pr-${{ github.event.number }}"
+
       - name: Destroy Fly.IO App
-        run: flyctl apps destroy pr-${{ github.event.number }} --yes
+        run: flyctl apps destroy ${{ steps.get-env.outputs.env_name }} --yes
         env:
           FLY_API_TOKEN: ${{ secrets.FLY }}
+
       - name: Destroy GitHub Environment
-        run: gh api -X DELETE /repos/{owner}/{repo}/environments/pr-${{ github.event.number }}
-  
-      
+        run: gh api -X DELETE /repos/{owner}/{repo}/environments/${{ steps.get-env.outputs.env_name }}
