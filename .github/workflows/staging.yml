@@ -1,4 +1,4 @@
-name: Deploy Staged
+name: Deploy Staging
 on:
   pull_request:
     types: [opened, closed]
@@ -10,6 +10,9 @@ jobs:
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
+      - name: Echo github obj
+        run: echo ${{ toJson(github) }}
+
       - uses: actions/checkout@v3
 
       - name: Set up Flyctl
@@ -17,12 +20,15 @@ jobs:
 
       - name: Generate Environment Name
         id: generate-env-name
-        run: echo "env_name=pr-${{ github.event.number }}" >> $GITHUB_ENV
+        run: echo "env_name=bnsn-pr-${{ github.event.number }}" >> $GITHUB_ENV
 
       - name: Deploy to Fly.io
         run: |
           if ! flyctl apps list --json | jq -e '.[] | select(.Name == env.env_name)' > /dev/null; then
             flyctl apps create ${{ env.env_name }} --org personal
+            echo "Created new app ${{ env.env_name }}"
+          else
+            echo "App ${{ env.env_name }} already exists"
           fi 
           flyctl deploy --app ${{ env.env_name }} --remote-only
         env:
