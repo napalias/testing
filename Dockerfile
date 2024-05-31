@@ -7,7 +7,7 @@ FROM node:${NODE_VERSION}-slim as base
 LABEL fly_launch_runtime="Remix"
 
 # NodeJS app lives here
-WORKDIR /
+#WORKDIR /
 
 # Set development environment
 ENV NODE_ENV=production
