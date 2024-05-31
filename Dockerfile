@@ -13,7 +13,7 @@ WORKDIR /
 ENV NODE_ENV=production
 
 # Setup pnpm
-#RUN npm install -g pnpm
+RUN npm install -g pnpm
 
 
 # Throw-away build stage to reduce size of final image
