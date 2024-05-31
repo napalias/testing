@@ -21,7 +21,9 @@ jobs:
 
       - name: Deploy to Fly.io
         run: |
-          flyctl apps create ${{ env.env_name }} --org personal
+          if ! flyctl apps list --json | jq -e '.[] | select(.Name == env.env_name)' > /dev/null; then
+            flyctl apps create ${{ env.env_name }} --org personal
+          fi 
           flyctl deploy --app ${{ env.env_name }} --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY }}
