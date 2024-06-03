@@ -20,12 +20,18 @@ jobs:
         with:
           version: latest
 
+      - name: Generate Database Password
+        id: generate_db_password
+        run: |
+          DB_PASSWORD=$(openssl rand -base64 32)
+          echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV      
+
       - name: Create Supabase Project
         id: create_supabase_project
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_API_KEY }}
         run: |
-          supabase projects create ${{ env.env_name }} --region us-east-1 --org-id fklntapdwmmmmthnruvs
+          supabase projects create ${{ env.env_name }} --region us-east-1 --org-id fklntapdwmmmmthnruvs --db-password ${{ env.DB_PASSWORD }}
           SUPABASE_PROJECT_ID=$(supabase projects list | grep "${{ env.env_name }}" | awk '{print $1}')
           SUPABASE_DB_URL=$(supabase db get-connection-string --project-id $SUPABASE_PROJECT_ID)
   
