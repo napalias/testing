@@ -17,9 +17,6 @@ RUN pnpm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Install Supabase CLI
-RUN npm install -g supabase
-
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
 
