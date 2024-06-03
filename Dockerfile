@@ -1,48 +1,27 @@
-# syntax = docker/dockerfile:1
+# Use an official Node.js runtime as a parent image
+FROM node:18-alpine
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20.10.0
-FROM node:${NODE_VERSION}-slim as base
+# Set the working directory in the container
+WORKDIR /app
 
-LABEL fly_launch_runtime="Remix"
+# Copy the package.json and package-lock.json or pnpm-lock.yaml files to the working directory
+COPY package*.json ./
+COPY pnpm-lock.yaml ./
 
-# NodeJS app lives here
-#WORKDIR /
-
-# Set development environment
-ENV NODE_ENV=production
-
-# Setup pnpm
+# Install pnpm
 RUN npm install -g pnpm
 
+# Install app dependencies using pnpm
+RUN pnpm install
 
-# Throw-away build stage to reduce size of final image
-#FROM base as build
+# Copy the rest of the application code to the working directory
+COPY . .
 
-# Install packages needed to build node modules
-#RUN apt-get update -qq && \
-#    apt-get install -y python-is-python3 pkg-config build-essential
+# Install Supabase CLI
+RUN npm install -g supabase
 
-# Copy application code
-#COPY --link . .
+# Make port 3000 available to the world outside this container
+EXPOSE 3000
 
-# Install node modules
-#RUN pnpm install --production=false
-
-# Build application
-#RUN pnpm turbo --filter @bnsn/app build
-
-# Remove development dependencies
-#RUN pnpm prune --production
-
-
-# Final stage for app image
-#FROM base
-
-# Copy built application
-#COPY --from=build /app /app
-#RUN ls -la /app
-#WORKDIR /app/apps/bnsn-api
-
-# Start the server by default, this can be overwritten at runtime
-CMD [ "pnpm", "run" ]
+# Define the command to run the app
+CMD ["pnpm", "start"]
