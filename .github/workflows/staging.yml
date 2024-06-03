@@ -39,6 +39,7 @@ jobs:
   
           echo "SUPABASE_PROJECT_ID=$SUPABASE_PROJECT_ID" >> $GITHUB_ENV
           echo "SUPABASE_DB_URL=$SUPABASE_DB_URL" >> $GITHUB_ENV
+          echo "SUPABASE_DB_PASSWORD=${{env.DB_PASSWORD}}" >> $GITHUB_ENV
 
       #- run: supabase init
       #- run: supabase db start   
