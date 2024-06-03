@@ -18,6 +18,11 @@ jobs:
         id: generate-env-name
         run: echo "env_name=bnsn-pr-${{ github.event.number }}" >> $GITHUB_ENV
 
+      - name: Install Supabase CLI
+        run: |
+          wget https://github.com/supabase/cli/releases/download/v0.12.8/supabase_0.12.8_linux_amd64.tar.gz
+          tar -xzf supabase_0.12.8_linux_amd64.tar.gz -C /usr/local/bin
+          supabase --version
       
       - name: Create Supabase Project
         id: create_supabase_project
