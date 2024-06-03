@@ -20,8 +20,8 @@ COPY . .
 # Install Supabase CLI
 RUN npm install -g supabase
 
-# Make port 3000 available to the world outside this container
-EXPOSE 3000
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
 
 # Define the command to run the app
 CMD ["pnpm", "start"]
