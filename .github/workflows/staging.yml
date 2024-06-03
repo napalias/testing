@@ -24,10 +24,10 @@ jobs:
         run: |
           supabase projects create ${{ env.env_name }} \
             --region us-east-1 \
-            --org-id <your-org-id> \
+            --org-id ${{ secrets.SUPABASE_ORGANIZATION_ID }} \
             --project-url ${{ secrets.SUPABASE_API_KEY }}
           # Extract the project ID and database URL
-          SUPABASE_PROJECT_ID=$(supabase projects list | grep "${{  env.env_name}}" | awk '{print $1}')
+          SUPABASE_PROJECT_ID=$(supabase projects list | grep "${{  env.env_name }}" | awk '{print $1}')
           SUPABASE_DB_URL=$(supabase db get-connection-string --project-id $SUPABASE_PROJECT_ID)
   
           echo "SUPABASE_PROJECT_ID=$SUPABASE_PROJECT_ID" >> $GITHUB_ENV
