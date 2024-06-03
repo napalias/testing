@@ -33,12 +33,12 @@ jobs:
           SUPABASE_ORGANIZATION_ID: ${{ secrets.SUPABASE_ORGANIZATION_ID }}
           DB_PASSWORD: ${{ env.DB_PASSWORD }}
         run: |
-          supabase projects create ${{ env.env_name }} --region us-east-1 --org-id SUPABASE_ORGANIZATION_ID --db-password  $DB_PASSWORD
+          supabase projects create ${{ env.env_name }} --region us-east-1 --org-id ${{env.SUPABASE_ORGANIZATION_ID}} --db-password  ${{env.DB_PASSWORD}}
           SUPABASE_PROJECT_ID=$(supabase projects list | grep "${{ env.env_name }}" | awk '{print $1}')
           SUPABASE_DB_URL=$(supabase db get-connection-string --project-id $SUPABASE_PROJECT_ID)
   
           echo "SUPABASE_PROJECT_ID=$SUPABASE_PROJECT_ID" >> $GITHUB_ENV
-          echo "SUPABASE_DB_URL=$SUPABASE_DB_URL" >> $GITHUB_ENV     
+          echo "SUPABASE_DB_URL=$SUPABASE_DB_URL" >> $GITHUB_ENV
 
       #- run: supabase init
       #- run: supabase db start   
