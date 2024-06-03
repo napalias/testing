@@ -54,7 +54,7 @@ jobs:
 
       - name: Execute supabase commands on Fly.io instance
         run: |
-          flyctl ext supabase projects create ${{ env.env_name }} --region us-east-1 --org-id ${{secrets.SUPABASE_ORGANIZATION_ID}} --db-password  ${{secrets.SUPABASE_DB_PASSWORD}}
+          flyctl ext supabase projects create ${{ env.env_name }} --org-id ${{secrets.SUPABASE_ORGANIZATION_ID}} --db-password  ${{secrets.SUPABASE_DB_PASSWORD}}
         env:
           FLY_API_TOKEN: ${{ secrets.FLY }}
 
