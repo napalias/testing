@@ -74,8 +74,9 @@ jobs:
       #- name: Set up Flyctl
       #  uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: Get Environment Name
-        run: echo "::set-output name=env_name::bnsn-pr-${{ github.event.number }}"
+      - name: Generate Environment Name
+        id: generate-env-name
+        run: echo "env_name=bnsn-pr-${{ github.event.number }}" >> $GITHUB_ENV
 
       #- name: Destroy Fly.IO App
       #  run: flyctl apps destroy ${{ env.env_name }} --yes
