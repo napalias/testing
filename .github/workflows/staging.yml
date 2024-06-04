@@ -91,7 +91,7 @@ jobs:
           PROJECT_ID=$(curl -s \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
             -H "Content-Type: application/json" \
-            https://api.supabase.io/v1/projects | jq -r '.[] | select(.name == "my-project") | .id')
+            https://api.supabase.io/v1/projects | jq -r '.[] | select(.name == "${{ env.env_name }}") | .id')
 
           curl -X DELETE \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
