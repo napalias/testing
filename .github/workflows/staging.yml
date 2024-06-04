@@ -66,20 +66,34 @@ jobs:
       #  env:
       #    FLY_API_TOKEN: ${{ secrets.FLY }}
 
+    
   cleanup_environment:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@master
+      #- name: Set up Flyctl
+      #  uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Get Environment Name
         run: echo "::set-output name=env_name::bnsn-pr-${{ github.event.number }}"
 
-      - name: Destroy Fly.IO App
-        run: flyctl apps destroy ${{ env.env_name }} --yes
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY }}
+      #- name: Destroy Fly.IO App
+      #  run: flyctl apps destroy ${{ env.env_name }} --yes
+      #  env:
+      #    FLY_API_TOKEN: ${{ secrets.FLY }}
 
-      - name: Destroy GitHub Environment
-        run: gh api -X DELETE /repos/{owner}/{repo}/environments/${{ env.env_name }}
+      #- name: Destroy GitHub Environment
+      #  run: gh api -X DELETE /repos/{owner}/{repo}/environments/${{ env.env_name }}
+
+      - name: Delete Supabase Project
+        if: github.event_name == 'pull_request' && github.event.action == 'closed'
+        run: |
+          PROJECT_ID=$(curl -s \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            https://api.supabase.io/v1/projects | jq -r '.[] | select(.name == "my-project") | .id')
+
+          curl -X DELETE \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            https://api.supabase.io/v1/projects/$PROJECT_ID
