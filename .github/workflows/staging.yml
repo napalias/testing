@@ -37,26 +37,34 @@ jobs:
       #- run: supabase init
       #- run: supabase db start   
 
-      - name: Set up Flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@master
+      #- name: Set up Flyctl
+      #  uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: Deploy to Fly.io
-        run: |
-          if ! flyctl apps list --json | jq -e '.[] | select(.Name == "${{ env.env_name }}")' > /dev/null; then
-            flyctl apps create ${{ env.env_name }} --org personal
-            echo "Created new app ${{ env.env_name }}"
-          else
-            echo "App ${{ env.env_name }} already exists"
-          fi 
-          flyctl deploy --app ${{ env.env_name }} --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY }}
+      #- name: Deploy to Fly.io
+      #  run: |
+      #    if ! flyctl apps list --json | jq -e '.[] | select(.Name == "${{ env.env_name }}")' > /dev/null; then
+      #      flyctl apps create ${{ env.env_name }} --org personal
+      #      echo "Created new app ${{ env.env_name }}"
+      #    else
+      #      echo "App ${{ env.env_name }} already exists"
+      #    fi 
+      #    flyctl deploy --app ${{ env.env_name }} --remote-only
+      #  env:
+      #    FLY_API_TOKEN: ${{ secrets.FLY }}
 
-      - name: Execute supabase commands on Fly.io instance
+      - name: Create Supabase Project
         run: |
-          flyctl exec pwd
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY }}
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"name": "my-project"}' \
+            https://api.supabase.io/v1/projects
+
+      #- name: Execute supabase commands on Fly.io instance
+      #  run: |
+      #    flyctl ssh console -C "npx "
+      #  env:
+      #    FLY_API_TOKEN: ${{ secrets.FLY }}
 
   cleanup_environment:
     if: github.event.action == 'closed'
