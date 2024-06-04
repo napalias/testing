@@ -86,7 +86,6 @@ jobs:
       #  run: gh api -X DELETE /repos/{owner}/{repo}/environments/${{ env.env_name }}
 
       - name: Delete Supabase Project
-        if: github.event_name == 'pull_request' && github.event.action == 'closed'
         run: |
           PROJECT_ID=$(curl -s \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
