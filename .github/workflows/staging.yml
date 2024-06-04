@@ -15,10 +15,10 @@ jobs:
         id: generate-env-name
         run: echo "env_name=bnsn-pr-${{ github.event.number }}" >> $GITHUB_ENV
 
-      - name: Setup Supabase
-        uses: supabase/setup-cli@v1
-        with:
-          version: latest
+      #- name: Setup Supabase
+      #  uses: supabase/setup-cli@v1
+      #  with:
+      #    version: latest
 
       # - name: Create Supabase Project
       #  id: create_supabase_project
@@ -57,7 +57,7 @@ jobs:
           curl -X POST \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d '{"name": "my-project"}' \
+            -d '{"name": "${{  env.env_name}}", "db_pass" : "${{secrets.SUPABASE_DB_PASSWORD}}", "organization_id" : "${{secrets.SUPABASE_ORGANIZATION_ID}}", "region" : "us-east-1"}' \
             https://api.supabase.io/v1/projects
 
       #- name: Execute supabase commands on Fly.io instance
