@@ -68,7 +68,7 @@ jobs:
 
     
   cleanup_environment:
-    if: github.event.action == 'closed'
+    if: github.event.action == 'closed' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       #- name: Set up Flyctl
