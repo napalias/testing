@@ -75,6 +75,11 @@ jobs:
           echo "SUPABASE_ANON_KEY=$(echo $PROJECT_DETAILS | jq -r '.anon_key')" >> $GITHUB_ENV
           echo "SUPABASE_SERVICE_ROLE_KEY=$(echo $PROJECT_DETAILS | jq -r '.service_role_key')" >> $GITHUB_ENV
           echo "SUPABASE_URL=$(echo $PROJECT_DETAILS | jq -r '.api_url')" >> $GITHUB_ENV
+          
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
       #- name: Execute supabase commands on Fly.io instance
       #  run: |
