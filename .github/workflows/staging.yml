@@ -72,10 +72,11 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
             -H "Content-Type: application/json" \
             https://api.supabase.io/v1/projects/$PROJECT_ID)
-  
-          echo "SUPABASE_ANON_KEY=$(echo $PROJECT_DETAILS | jq -r '.anon_key')" >> $GITHUB_ENV
-          echo "SUPABASE_SERVICE_ROLE_KEY=$(echo $PROJECT_DETAILS | jq -r '.service_role_key')" >> $GITHUB_ENV
-          echo "SUPABASE_URL=$(echo $PROJECT_DETAILS | jq -r '.api_url')" >> $GITHUB_ENV
+          echo "PROJECT_DETAILS=$PROJECT_DETAILS" >> $GITHUB_ENV
+            
+        #  echo "SUPABASE_ANON_KEY=$(echo $PROJECT_DETAILS | jq -r '.anon_key')" >> $GITHUB_ENV
+        #  echo "SUPABASE_SERVICE_ROLE_KEY=$(echo $PROJECT_DETAILS | jq -r '.service_role_key')" >> $GITHUB_ENV
+        #  echo "SUPABASE_URL=$(echo $PROJECT_DETAILS | jq -r '.api_url')" >> $GITHUB_ENV
           
       - name: Dump GitHub context
         env:
