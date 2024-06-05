@@ -59,20 +59,21 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{"name": "${{  env.env_name}}", "db_pass" : "${{secrets.SUPABASE_DB_PASSWORD}}", "organization_id" : "${{secrets.SUPABASE_ORGANIZATION_ID}}", "region" : "us-east-1"}' \
             https://api.supabase.io/v1/projects)
-          echo "PROJECT_ID=$PROJECT.id" >> $GITHUB_ENV
+          echo "SUPABASE_PROJECT_ID=$PROJECT.id" >> $GITHUB_ENV
+          echo "SUPABASE_URL=https://${{env.SUPABASE_PROJECT_ID}}.supabase.co"
             
-      - name: Get Supabase Project Details
-        run: |
-          PROJECT_ID=$(curl -s \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            https://api.supabase.io/v1/projects | jq -r '.[] | select(.name == "${{  env.env_name }}") | .id')
+      #- name: Get Supabase Project Details
+      #  run: |
+      #    PROJECT_ID=$(curl -s \
+      #      -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
+      #      -H "Content-Type: application/json" \
+      #      https://api.supabase.io/v1/projects | jq -r '.[] | select(.name == "${{  env.env_name }}") | .id')
   
-          PROJECT_DETAILS=$(curl -s \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            https://api.supabase.io/v1/projects/$PROJECT_ID)
-          echo "PROJECT_DETAILS=$PROJECT_DETAILS" >> $GITHUB_ENV
+      #    PROJECT_DETAILS=$(curl -s \
+      #      -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
+      #      -H "Content-Type: application/json" \
+      #      https://api.supabase.io/v1/projects/$PROJECT_ID)
+      #    echo "PROJECT_DETAILS=$PROJECT_DETAILS" >> $GITHUB_ENV
             
         #  echo "SUPABASE_ANON_KEY=$(echo $PROJECT_DETAILS | jq -r '.anon_key')" >> $GITHUB_ENV
         #  echo "SUPABASE_SERVICE_ROLE_KEY=$(echo $PROJECT_DETAILS | jq -r '.service_role_key')" >> $GITHUB_ENV
