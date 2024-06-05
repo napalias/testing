@@ -54,11 +54,12 @@ jobs:
 
       - name: Create Supabase Project
         run: |
-          curl -X POST \
+          PROJECT=$(curl -X POST \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d '{"name": "${{  env.env_name}}", "db_pass" : "${{secrets.SUPABASE_DB_PASSWORD}}", "organization_id" : "${{secrets.SUPABASE_ORGANIZATION_ID}}", "region" : "us-east-1"}' \
-            https://api.supabase.io/v1/projects
+            https://api.supabase.io/v1/projects)
+          echo "PROJECT=$PROJECT" >> $GITHUB_ENV
             
       - name: Get Supabase Project Details
         run: |
@@ -78,7 +79,7 @@ jobs:
           
       - name: Dump GitHub context
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
+          GITHUB_CONTEXT: ${{ toJson(github.env) }}
         run: echo "$GITHUB_CONTEXT"
 
       #- name: Execute supabase commands on Fly.io instance
