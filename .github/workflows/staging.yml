@@ -62,6 +62,7 @@ jobs:
           PROJECT_ID=$(echo $PROJECT | jq -r '.id')
           echo "SUPABASE_PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
           echo "SUPABASE_URL=https://${{ env.SUPABASE_PROJECT_ID }}.supabase.co"
+          echo "123"
             
       #- name: Get Supabase Project Details
       #  run: |
