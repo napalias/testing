@@ -18,7 +18,7 @@ jobs:
       - name: Create Environment
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GH_PAT }}
+          github-token: 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
           script: |
             const { owner, repo } = context.repo;
             const environmentName = bnsn-pr-${{ github.event.number }}";
