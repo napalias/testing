@@ -46,7 +46,7 @@ jobs:
 
       - name: Add Secrets to Environment
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: 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
         run: |
           curl -X PUT \
             -H "Accept: application/vnd.github.v3+json" \
