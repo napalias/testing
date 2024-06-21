@@ -14,8 +14,52 @@ jobs:
       - name: Generate Environment Name
         id: generate-env-name
         run: echo "env_name=bnsn-pr-${{ github.event.number }}" >> $GITHUB_ENV
+           
+      - name: Create Environment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GH_PAT }}
+          script: |
+            const { owner, repo } = context.repo;
+            const environmentName = bnsn-pr-${{ github.event.number }}";
+            
+            // Check if the environment already exists
+            try {
+              await github.rest.repos.getEnvironment({
+                owner,
+                repo,
+                environment_name: environmentName,
+              });
+              console.log(`Environment '${environmentName}' already exists.`);
+            } catch (error) {
+              if (error.status === 404) {
+                await github.rest.repos.createOrUpdateEnvironment({
+                  owner,
+                  repo,
+                  environment_name: environmentName,
+                });
+                console.log(`Environment '${environmentName}' created.`);
+              } else {
+                throw error;
+              }
+            }
 
-      
+      - name: Add Secrets to Environment
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          curl -X PUT \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token $GH_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/environments/development/secrets/ENV_VAR_1 \
+            -d '{"MY_VALUE_1":"123123123"}'
+            
+          curl -X PUT \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token $GH_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/environments/development/secrets/ENV_VAR_2 \
+            -d '{"MY_VALUE_2":"456"}'
+
     
   # cleanup_environment:
   #   if: github.event.action == 'closed' || github.event.pull_request.merged == true
