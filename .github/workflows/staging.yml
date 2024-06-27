@@ -17,20 +17,20 @@ jobs:
         run: echo "env_name=bnsn-pr-${{ github.event.number }}" >> $GITHUB_ENV
       
       - name: Create new environment
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB }}
-      run: |
-        PR_NUMBER=${{ github.event.pull_request.number }}
-        ENV_NAME="bnsn-pr-${{ github.event.number }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB }}
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          ENV_NAME="bnsn-pr-${{ github.event.number }}"
         
-        # Create the environment
-        curl -X POST \
-          -H "Authorization: token $GITHUB_TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/environments \
-          -d "{\"name\":\"$ENV_NAME\"}"
-        
-        echo "Environment $ENV_NAME created for PR #$PR_NUMBER"
+          # Create the environment
+          curl -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/environments \
+            -d "{\"name\":\"$ENV_NAME\"}"
+          
+          echo "Environment $ENV_NAME created for PR #$PR_NUMBER"
 
 
            
