@@ -20,10 +20,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB }}
         run: |
-          gh api \
-          --method PUT \
+          curl -L \
+          -X PUT \
           -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB }}" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/napalias/testing/environments/bnsn-pr-${{ github.event.number }} \
-          -F "wait_timer=30" -F "prevent_self_review=false" -f "reviewers[][type]=User" -F "reviewers[][id]=1" -f "reviewers[][type]=Team" -F "reviewers[][id]=1" -F "deployment_branch_policy[protected_branches]=false" -F "deployment_branch_policy[custom_branch_policies]=true"
+          https://api.github.com/repos/napalias/testing/environments/mytesting \
+          -d '{"wait_timer":30,"prevent_self_review":false,"reviewers":[{"type":"User","id":1},{"type":"Team","id":1}],"deployment_branch_policy":{"protected_branches":false,"custom_branch_policies":true}}'
 
