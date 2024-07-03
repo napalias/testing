@@ -11,6 +11,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Install Postgress Client    
+        run: |
+          apt-get install --yes --no-install-recommends postgresql-client
     
       - name: Create new environment
         env:
