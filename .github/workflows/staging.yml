@@ -2,7 +2,11 @@ name: Deploy Staging
 on:
   pull_request:
     branches:
-      - main
+      - mai
+    types:
+    - opened
+    - closed
+    - synchronize
 jobs:
   deploy:
     if: github.event.action == 'opened'
@@ -34,7 +38,7 @@ jobs:
             
   update:
     if: github.event.action == 'synchronize'
-    name: Update app
+    name: Pull request update
     runs-on: ubuntu-latest
 
     steps:
@@ -56,7 +60,7 @@ jobs:
       - run: echo "upadte pull request"
 
   cleanup:
-    if: github.event.action == 'closed'
+    if: github.event.pull_request.merged == true || github.event.action == 'closed'
     runs-on: ubuntu-latest
 
     steps:
