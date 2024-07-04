@@ -17,10 +17,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Postgress Client    
-        run: |
-          apt-get install --yes --no-install-recommends postgresql-client
-    
       - name: Create new environment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB }}
@@ -36,6 +32,29 @@ jobs:
         id: generate-env-name
         run: echo "env_name=bnsn-pr-${{ github.event.number }}" >> $GITHUB_ENV    
             
+  update:
+    if: github.event.action == 'synchronize'
+    name: Update app
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Update environment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB }}
+        run: |
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -d '{"environment":"bnsn-pr-${{ github.event.number }}"}' \
+            https://api.github.com/repos/napalias/testing/environments/bnsn-pr-${{ github.event.number }}
+            
+      - run: echo "upadte pull request"
+
   cleanup:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
